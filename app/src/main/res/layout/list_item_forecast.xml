@@ -5,5 +5,5 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:minHeight='?android:attr/listPreferredItemHeight'
-  android:gravity="center"
+  android:gravity="start|center"
   tools:text="Today - Sunny - 88/66" />
