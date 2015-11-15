@@ -1,5 +1,6 @@
 package com.juankysoriano.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -54,6 +56,10 @@ public class ForecastFragment extends Fragment {
             case R.id.action_refresh:
                 new FetchWeatherClass().execute("http://api.openweathermap.org/data/2.5/forecast/daily", "w93bq");
                 return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -70,6 +76,17 @@ public class ForecastFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String forecast = adapter.getItem(position);
+                        Intent intent = new Intent(getContext(), DetailActivity.class);
+                        intent.putExtra(Intent.EXTRA_TEXT, forecast);
+                        startActivity(intent);
+                    }
+                }
+        );
 
         return rootView;
     }
