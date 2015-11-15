@@ -2,11 +2,11 @@
 
 *Lesson 1*: Create Project Sunshine
   
-  Progress: 0%
+  Progress: 100%
 
 *Lesson 2*: Connect Sunshine to the Cloud
   
-  Progress: 0%
+  Progress: 100%
 
 *Lesson 3*: New Activities and Intents
   
