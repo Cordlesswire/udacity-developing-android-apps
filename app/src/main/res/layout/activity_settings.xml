@@ -21,4 +21,6 @@
 
   </android.support.design.widget.AppBarLayout>
 
+  <include layout="@layout/settings_main" />
+
 </android.support.design.widget.CoordinatorLayout>

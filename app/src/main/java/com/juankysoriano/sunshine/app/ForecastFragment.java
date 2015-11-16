@@ -1,9 +1,11 @@
 package com.juankysoriano.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -54,7 +56,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                new FetchWeatherClass().execute("http://api.openweathermap.org/data/2.5/forecast/daily", "w93bq");
+                updateWeather();
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(getContext(), SettingsActivity.class);
@@ -62,6 +64,14 @@ public class ForecastFragment extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateWeather() {
+        String key = getString(R.string.pref_location_key);
+        String defaultValue = getString(R.string.pref_location_defaultValue);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String postCode = preferences.getString(key, defaultValue);
+        new FetchWeatherClass().execute("http://api.openweathermap.org/data/2.5/forecast/daily", postCode);
     }
 
     @Override
@@ -89,6 +99,12 @@ public class ForecastFragment extends Fragment {
         );
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 
     public class FetchWeatherClass extends AsyncTask<String, Void, String[]> {
@@ -268,4 +284,5 @@ public class ForecastFragment extends Fragment {
 
         }
     }
+
 }
