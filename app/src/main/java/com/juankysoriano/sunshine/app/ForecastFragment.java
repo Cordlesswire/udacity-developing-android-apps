@@ -82,7 +82,8 @@ public class ForecastFragment extends Fragment {
         adapter = new ArrayAdapter<>(
                 getContext(),
                 R.layout.list_item_forecast,
-                R.id.list_item_forecast_textview);
+                R.id.list_item_forecast_textview
+        );
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(adapter);
@@ -139,7 +140,7 @@ public class ForecastFragment extends Fragment {
                         .appendQueryParameter("q", posdcode)
                         .appendQueryParameter("mode", "json")
                         .appendQueryParameter("cnt", "7")
-                        .appendQueryParameter("units","metric")
+                        .appendQueryParameter("units", "metric")
                         .appendQueryParameter("APPID", BuildConfig.OPEN_WEATHER_MAP_API_KEY).build();
 
                 URL url = new URL(uri.toString());
@@ -204,11 +205,28 @@ public class ForecastFragment extends Fragment {
          */
         private String formatHighLows(double high, double low) {
             // For presentation, assume the user doesn't care about tenths of a degree.
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
+            String unitsKey = getString(R.string.pref_units_key);
+            String unitsMetric = getString(R.string.pref_units_key);
+            String unitsImperial = getString(R.string.pref_units_imperial);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String unitsInPreferences = preferences.getString(unitsKey, unitsMetric);
+            long roundedHigh;
+            long roundedLow;
+
+            if (unitsInPreferences.equals(unitsImperial)) {
+                roundedHigh = Math.round(toImperial(high));
+                roundedLow = Math.round(toImperial(low));
+            } else {
+                roundedHigh = Math.round(high);
+                roundedLow = Math.round(low);
+            }
 
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
+        }
+
+        private double toImperial(double temperature) {
+            return temperature * 1.8 + 32;
         }
 
         /**
