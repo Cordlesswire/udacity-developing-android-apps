@@ -52,12 +52,17 @@ public class DetailFragment extends Fragment {
 
         switch (id) {
             case R.id.action_settings:
-                Intent intent = new Intent(getContext(), SettingsActivity.class);
-                startActivity(intent);
+                openSettings();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void openSettings() {
+        Intent intent = new Intent(getContext(), SettingsActivity.class);
+        startActivity(intent);
+    }
+
 
 }

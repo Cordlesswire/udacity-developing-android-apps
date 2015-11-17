@@ -62,6 +62,10 @@ public class ForecastFragment extends Fragment {
                 Intent intent = new Intent(getContext(), SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_location:
+                openPreferredLocationInMap();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -72,6 +76,22 @@ public class ForecastFragment extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String postCode = preferences.getString(key, defaultValue);
         new FetchWeatherClass().execute("http://api.openweathermap.org/data/2.5/forecast/daily", postCode);
+    }
+
+    private void openPreferredLocationInMap() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String locationKey = getString(R.string.pref_location_key);
+        String locationDefaultValue = getString(R.string.pref_location_defaultValue);
+        String location = sharedPreferences.getString(locationKey, locationDefaultValue);
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q", location)
+                .build();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     @Override
