@@ -3,6 +3,8 @@ package com.juankysoriano.sunshine.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +18,8 @@ import android.widget.TextView;
  */
 public class DetailFragment extends Fragment {
 
+    private String forecast;
+
     public DetailFragment() {
     }
 
@@ -28,7 +32,7 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        String forecast = getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        forecast = getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT);
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_detail, container, false);
         TextView detailText = (TextView) rootView.findViewById(R.id.detail_forecast_text);
@@ -40,7 +44,25 @@ public class DetailFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.detailsfragment, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        if (forecast != null) {
+            shareActionProvider.setShareIntent(createShareForecastIntent());
+        }
+    }
+
+    private Intent createShareForecastIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, forecast + " #SunshineApp");
+
+        return intent;
     }
 
     @Override
