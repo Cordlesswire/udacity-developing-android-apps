@@ -10,7 +10,7 @@
 
 *Lesson 3*: New Activities and Intents
   
-  Progress: 0%
+  Progress: 100%
 
 *Project 1*: Popular Movies App, Stage 1
   
@@ -18,7 +18,7 @@
 
 *Lesson 4a*: Lifecycle and Databases
   
-  Progress: 0%
+  Progress: 33%
 
 *Lesson 4b*: Content Providers and Loaders
   
