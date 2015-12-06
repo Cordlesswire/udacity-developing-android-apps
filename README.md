@@ -18,10 +18,14 @@
 
 *Lesson 4a*: Lifecycle and Databases
   
-  Progress: 33%
+  Progress: 100%
 
-*Lesson 4b*: Content Providers and Loaders
+*Lesson 4b*: Content Providers
   
+  Progress: 100%
+  
+*Lesson 4c*: Hooking ContentProviders with Loaders.
+
   Progress: 0%
 
 *Lesson 5*: Rich and Responsive Layouts
