@@ -32,6 +32,10 @@
       android:label="@string/title_activity_settings"
       android:theme="@style/AppTheme.NoActionBar"
       android:parentActivityName=".MainActivity" />
+
+    <provider
+      android:authorities="com.juankysoriano.sunshine.app"
+      android:name="com.juankysoriano.sunshine.app.data.WeatherProvider"/>
   </application>
 
 </manifest>
