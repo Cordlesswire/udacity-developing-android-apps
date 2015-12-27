@@ -32,12 +32,18 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        forecast = getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_detail, container, false);
-        TextView detailText = (TextView) rootView.findViewById(R.id.detail_forecast_text);
+        // The detail Activity called via intent.  Inspect the intent for forecast data.
+        Intent intent = getActivity().getIntent();
+        if (intent != null) {
+            forecast = intent.getDataString();
+        }
 
-        detailText.setText(forecast);
+        if (null != forecast) {
+            ((TextView) rootView.findViewById(R.id.detail_forecast_text))
+                    .setText(forecast);
+        }
 
         return rootView;
     }
