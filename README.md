@@ -26,7 +26,7 @@
 
 *Lesson 5*: Rich and Responsive Layouts
   
-  Progress: 0%
+  Progress: 50%
 
 *Lesson 6*: Services and Notifications
   
