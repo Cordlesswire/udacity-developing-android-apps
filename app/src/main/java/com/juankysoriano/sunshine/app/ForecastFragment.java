@@ -14,7 +14,6 @@ package com.juankysoriano.sunshine.app;/*
  * limitations under the License.
  */
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -73,6 +72,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private ForecastAdapter adapter;
 
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        void onItemSelected(Uri dateUri);
+    }
+
     public ForecastFragment() {
     }
 
@@ -124,13 +135,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                         Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                         if (cursor != null) {
                             String locationSetting = Utility.getPreferredLocation(getActivity());
-                            Intent intent = new Intent(getActivity(), DetailActivity.class)
-                                    .setData(
+                            ((Callback) getActivity())
+                                    .onItemSelected(
                                             WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                                     locationSetting, cursor.getLong(COL_WEATHER_DATE)
                                             )
                                     );
-                            startActivity(intent);
                         }
                     }
                 }
@@ -145,7 +155,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     // since we read the location when we create the loader, all we need to do is restart things
-    void onLocationChanged( ) {
+    void onLocationChanged() {
         updateWeather();
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
@@ -163,14 +173,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // Sort order:  Ascending, by date.
         String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
         Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                locationSetting, System.currentTimeMillis());
+                locationSetting, System.currentTimeMillis()
+        );
 
-        return new CursorLoader(getActivity(),
+        return new CursorLoader(
+                getActivity(),
                 weatherForLocationUri,
                 FORECAST_COLUMNS,
                 null,
                 null,
-                sortOrder);
+                sortOrder
+        );
     }
 
     @Override
