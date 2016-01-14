@@ -69,8 +69,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_CONDITION_ID = 6;
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
+    private static final String SELECTED_ITEM_POSITION = "SELECTED_ITEM_POSITION";
 
     private ForecastAdapter adapter;
+    private int position;
+    private ListView listView;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -78,12 +81,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
      * selections.
      */
     public interface Callback {
+
         /**
          * DetailFragmentCallback for when an item has been selected.
          */
         void onItemSelected(Uri dateUri);
     }
-
     public ForecastFragment() {
     }
 
@@ -114,16 +117,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // The CursorAdapter will take data from our cursor and populate the ListView.
         adapter = new ForecastAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(adapter);
-
         // We'll call our MainActivity
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -142,10 +144,29 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                                             )
                                     );
                         }
+                        ForecastFragment.this.position = position;
                     }
                 }
         );
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_ITEM_POSITION)) {
+            this.position = savedInstanceState.getInt(SELECTED_ITEM_POSITION);
+        }
+
         return rootView;
+    }
+
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        adapter.setUseTodayLayout(useTodayLayout);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (this.position != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_ITEM_POSITION, position);
+        }
     }
 
     @Override
@@ -189,10 +210,16 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         adapter.swapCursor(cursor);
+        if (this.position != ListView.INVALID_POSITION) {
+            listView.smoothScrollToPosition(position);
+            listView.setItemChecked(position, true);
+            listView.setSelection(position);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         adapter.swapCursor(null);
     }
+
 }

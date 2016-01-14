@@ -16,7 +16,9 @@ public class MainActivity extends NavigationActivity implements ForecastFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_logo);
+        getSupportActionBar().setTitle("");
         if (findViewById(R.id.weather_detail_container) != null) {
             twoPane = true;
 
@@ -26,7 +28,10 @@ public class MainActivity extends NavigationActivity implements ForecastFragment
             }
         } else {
             twoPane = false;
+            getSupportActionBar().setElevation(0f);
         }
+        ForecastFragment forecastFragment = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+        forecastFragment.setUseTodayLayout(!twoPane);
     }
 
     @Override
