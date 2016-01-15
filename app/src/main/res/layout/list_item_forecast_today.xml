@@ -5,7 +5,9 @@
   android:gravity="center_vertical"
   android:minHeight="?android:attr/listPreferredItemHeight"
   android:orientation="horizontal"
-  android:background="@drawable/today_touch_selector">
+  android:foreground="@drawable/today_touch_selector"
+  android:background="@color/sunshine_blue"
+  android:elevation="8dp">
 
   <LinearLayout
     android:layout_height="wrap_content"

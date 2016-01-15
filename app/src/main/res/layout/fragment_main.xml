@@ -10,8 +10,8 @@
     android:id="@+id/listview_forecast"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="@drawable/list_divider"
-    android:dividerHeight="2px"
+    android:divider="@android:color/white"
+    android:dividerHeight="0px"
     tools:layout="@layout/list_item_forecast"/>
 
 </FrameLayout>
