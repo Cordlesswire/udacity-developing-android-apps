@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -40,11 +39,10 @@ import org.json.JSONObject;
 
 import static com.juankysoriano.sunshine.app.data.WeatherContract.WeatherEntry;
 
-public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
+public class FetchWeatherTask {
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
     private final Context mContext;
-    private boolean DEBUG = true;
 
     public FetchWeatherTask(Context context) {
         mContext = context;
@@ -240,14 +238,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         }
     }
 
-    @Override
-    protected Void doInBackground(String... params) {
+    public void update(String locationQuery) {
 
-        // If there's no zip code, there's nothing to look up.  Verify size of params.
-        if (params.length == 0) {
-            return null;
-        }
-        String locationQuery = params[0];
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -274,7 +266,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             final String APP_ID_PARAM = "APPID";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, params[0])
+                    .appendQueryParameter(QUERY_PARAM, locationQuery)
                     .appendQueryParameter(FORMAT_PARAM, format)
                     .appendQueryParameter(UNITS_PARAM, units)
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
@@ -293,7 +285,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
-                return null;
+                return;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -307,7 +299,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                return null;
+                return;
             }
             forecastJsonStr = buffer.toString();
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
@@ -331,7 +323,5 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                 }
             }
         }
-        // This will only happen if there was an error getting or parsing the forecast.
-        return null;
     }
 }

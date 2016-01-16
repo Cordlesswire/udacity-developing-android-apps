@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.juankysoriano.sunshine.app.sync.SunshineSyncAdapter;
+
 public class MainActivity extends NavigationActivity implements ForecastFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -32,6 +34,7 @@ public class MainActivity extends NavigationActivity implements ForecastFragment
         }
         ForecastFragment forecastFragment = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
         forecastFragment.setUseTodayLayout(!twoPane);
+        SunshineSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override

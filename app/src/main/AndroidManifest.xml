@@ -4,6 +4,12 @@
 
   <uses-permission android:name="android.permission.INTERNET" />
 
+  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+
+  <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+  <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
   <application
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
@@ -20,22 +26,53 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-
     <activity
       android:name=".DetailActivity"
       android:label="@string/title_activity_detail"
-      android:theme="@style/AppTheme.NoActionBar"
-      android:parentActivityName=".MainActivity"/>
-
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
     <activity
       android:name=".SettingsActivity"
       android:label="@string/title_activity_settings"
-      android:theme="@style/AppTheme.NoActionBar"
-      android:parentActivityName=".MainActivity" />
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
 
     <provider
-      android:authorities="com.juankysoriano.sunshine.app"
-      android:name="com.juankysoriano.sunshine.app.data.WeatherProvider"/>
+      android:name=".data.WeatherProvider"
+      android:authorities="com.juankysoriano.sunshine.app" />
+
+    <!-- SyncAdapter's dummy authentication service -->
+
+    <service android:name=".sync.SunshineAuthenticatorService">
+
+      <intent-filter>
+
+        <action android:name="android.accounts.AccountAuthenticator" />
+
+      </intent-filter>
+
+      <meta-data
+        android:name="android.accounts.AccountAuthenticator"
+        android:resource="@xml/authenticator" />
+
+    </service>
+    <!-- The SyncAdapter service -->
+
+    <service
+      android:name=".sync.SunshineSyncService"
+      android:exported="true">
+
+      <intent-filter>
+
+        <action android:name="android.content.SyncAdapter" />
+
+      </intent-filter>
+
+      <meta-data
+        android:name="android.content.SyncAdapter"
+        android:resource="@xml/syncadapter" />
+
+    </service>
   </application>
 
 </manifest>
