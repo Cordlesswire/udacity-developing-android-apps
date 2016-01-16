@@ -30,7 +30,7 @@
 
 *Lesson 6*: Services and Notifications
   
-  Progress: 0%
+  Progress: 70%
 
 *Project *: TBD
   
