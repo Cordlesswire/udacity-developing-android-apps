@@ -31,7 +31,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
         String locationQuery = Utility.getPreferredLocation(getContext());
-        new FetchWeatherTask(getContext()).update(locationQuery);
+        FetchWeatherTask task = new FetchWeatherTask(getContext());
+        task.update(locationQuery);
+        task.notifyWeather();
     }
 
     /**
